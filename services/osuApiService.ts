@@ -44,7 +44,7 @@ export async function getUser(user: string): Promise<LocalUser | null> {
   const params = new URLSearchParams();
   params.append('k', apiKey);
   params.append('u', user);
-  params.append('m', "3");
+  params.append('m', osuMode);
   const response = await fetch(`${API_URL}/get_user`, { method: 'post', body: params });
 
   const body = await response.json() as UserResponse[];
@@ -90,7 +90,7 @@ async function sendRequest(date: string): Promise<string | null> {
   const params = new URLSearchParams();
   params.append('k', apiKey);
   params.append('since', date);
-  params.append('m', '3');
+  params.append('m', osuMode);
   params.append('a', '0');
   console.info(`Current date: ${date}`);
 
@@ -111,7 +111,7 @@ export async function getBeatmapInfo(id: string): Promise<BeatmapResponse | null
   const params = new URLSearchParams();
   params.append('k', apiKey);
   params.append('b', id);
-  params.append('m', '3');
+  params.append('m', osuMode);
   const response = await fetch(`${API_URL}/get_beatmaps`, { method: 'post', body: params });
   const beatmaps = await response.json() as BeatmapResponse[];
 
