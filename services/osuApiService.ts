@@ -16,6 +16,7 @@ const API_URL = `${OSU_URL}/api`;
 let cachedUsers: Record<string, string> = {};
 
 let apiKey: string;
+let osuMode: string;
 let lastDbSize = 0;
 
 export async function start(): Promise<void> {
@@ -43,6 +44,7 @@ export async function getUser(user: string): Promise<LocalUser | null> {
   const params = new URLSearchParams();
   params.append('k', apiKey);
   params.append('u', user);
+  params.append('m', "3");
   const response = await fetch(`${API_URL}/get_user`, { method: 'post', body: params });
 
   const body = await response.json() as UserResponse[];
@@ -88,6 +90,8 @@ async function sendRequest(date: string): Promise<string | null> {
   const params = new URLSearchParams();
   params.append('k', apiKey);
   params.append('since', date);
+  params.append('m', '3');
+  params.append('a', '0');
   console.info(`Current date: ${date}`);
 
   const response = await fetch(`${API_URL}/get_beatmaps`, { method: 'post', body: params });
@@ -107,7 +111,7 @@ export async function getBeatmapInfo(id: string): Promise<BeatmapResponse | null
   const params = new URLSearchParams();
   params.append('k', apiKey);
   params.append('b', id);
-
+  params.append('m', '3');
   const response = await fetch(`${API_URL}/get_beatmaps`, { method: 'post', body: params });
   const beatmaps = await response.json() as BeatmapResponse[];
 
@@ -124,8 +128,9 @@ async function saveNewBeatmaps(date: string): Promise<void> {
   }
 }
 
-export async function updateBeatmapIds(key: string): Promise<void> {
+export async function updateBeatmapIds(key: string, mode: string): Promise<void> {
   apiKey = key;
+  osuMode = mode;
   await connect();
 
   const date = await getLatestDate();

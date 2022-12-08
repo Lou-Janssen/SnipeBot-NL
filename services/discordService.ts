@@ -81,6 +81,7 @@ bot.on('ready', () => {
     createDatabase(rows, curIndex)
       .catch((error) => console.error(error));
   }).catch((error) => console.error(error));
+  console.info('Bot Done');
 });
 
 export function getBotId(): string | undefined {
@@ -98,7 +99,6 @@ export async function publish(message: MessageOptions): Promise<(Message | Messa
   const channels = await Promise.all(
     getLinkedChannels().map((channelId) => bot.channels.cache.get(channelId))
   );
-
   const sendableChannels = channels.filter((channel) => {
     return channel instanceof TextChannel ||
       channel instanceof DMChannel ||

@@ -10,7 +10,7 @@ if (!mongoDbUser) throw Error('MONGODB_USER environment variable not defined!');
 const mongoDbPass = process.env.MONGODB_PASS;
 if (!mongoDbPass) throw Error('MONGODB_PASS environment variable not defined!');
 
-const uri = `mongodb+srv://${mongoDbUser}:${mongoDbPass}@cluster0.himju.gcp.mongodb.net/osusnipebot?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${mongoDbUser}:${mongoDbPass}@snipe-bot.xcrnmqa.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri);
 const BEATMAPS = 'Beatmaps';
 
@@ -232,6 +232,7 @@ export async function getMapIds(): Promise<string[]> {
   const mapIds = await client.db().collection(BEATMAPS)
     .find().project({ _id: 1 }).map((document) => {
       const beatmap = document as { _id: string };
+      console.info(beatmap._id);
       return beatmap._id;
     }).toArray();
 

@@ -18,7 +18,7 @@ export const Mode: Record<string, number> = {
   ctb: 2,
   mania: 3
 };
-const OWNER_ID = 68834122860077056;
+const OWNER_ID = 196642811964030986;
 
 export async function tryGetUser(user: User): Promise<LocalUser | null> {
   const userId = getLinkedUsers()[user.id];
