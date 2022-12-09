@@ -12,7 +12,6 @@ import {
 import Score from '../classes/database/score';
 import * as ApiScore from '../classes/osuApi/score';
 import { getBeatmapInfo, MODES } from './osuApiService';
-import { Mode } from '../commands/utils';
 import Statistics from '../classes/osuApi/statistics';
 
 export const OSU_URL = 'https://osu.ppy.sh';
@@ -112,7 +111,7 @@ function getMessageOptionsFromScores(
   const miss = Statistics.getMiss(statistics);
 
   switch (firstPlace.ruleset_id) {
-    case Mode.mania: {
+    case 3: {
       const geki = Statistics.getGeki(statistics);
       const katu = Statistics.getKatu(statistics);
       const count50 = Statistics.getCount50(statistics);
@@ -120,13 +119,13 @@ function getMessageOptionsFromScores(
       statisticsText = `{ ${geki}/${count300}/${katu}/${count100}/${count50}/${miss} }`;
       break;
     }
-    case Mode.ctb: {
+    case 2: {
       const katu = Statistics.getKatu(statistics);
 
       statisticsText = `{ ${count300}/${count100}/${katu}/${miss} }`;
       break;
     }
-    case Mode.taiko: {
+    case 1: {
       statisticsText = `{ ${count300}/${count100}/${miss} }`;
       break;
     }

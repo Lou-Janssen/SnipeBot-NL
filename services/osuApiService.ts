@@ -8,7 +8,7 @@ import {
   bulkAddBeatmapRows, connect, getMapCount, getNewestMap
 } from './databaseService';
 import { downloadFile, uploadFile } from './dropboxService';
-
+import { Int32 } from 'mongodb';
 export const MODES = ['osu!', 'osu!taiko', 'osu!catch', 'osu!mania'];
 const CACHED_USERS_FILE = 'cachedUsers.json';
 const API_URL = `${OSU_URL}/api`;
@@ -16,7 +16,7 @@ const API_URL = `${OSU_URL}/api`;
 let cachedUsers: Record<string, string> = {};
 
 let apiKey: string;
-let osuMode: string;
+export let osuMode: number;
 let lastDbSize = 0;
 
 export async function start(): Promise<void> {
@@ -44,7 +44,7 @@ export async function getUser(user: string): Promise<LocalUser | null> {
   const params = new URLSearchParams();
   params.append('k', apiKey);
   params.append('u', user);
-  params.append('m', osuMode);
+  params.append('m', osuMode.toString());
   const response = await fetch(`${API_URL}/get_user`, { method: 'post', body: params });
 
   const body = await response.json() as UserResponse[];
@@ -90,7 +90,7 @@ async function sendRequest(date: string): Promise<string | null> {
   const params = new URLSearchParams();
   params.append('k', apiKey);
   params.append('since', date);
-  params.append('m', osuMode);
+  params.append('m', osuMode.toString());
   params.append('a', '0');
   console.info(`Current date: ${date}`);
 
@@ -111,7 +111,7 @@ export async function getBeatmapInfo(id: string): Promise<BeatmapResponse | null
   const params = new URLSearchParams();
   params.append('k', apiKey);
   params.append('b', id);
-  params.append('m', osuMode);
+  params.append('m', osuMode.toString());
   const response = await fetch(`${API_URL}/get_beatmaps`, { method: 'post', body: params });
   const beatmaps = await response.json() as BeatmapResponse[];
 
@@ -130,7 +130,7 @@ async function saveNewBeatmaps(date: string): Promise<void> {
 
 export async function updateBeatmapIds(key: string, mode: string): Promise<void> {
   apiKey = key;
-  osuMode = mode;
+  osuMode = Number(mode);
   await connect();
 
   const date = await getLatestDate();

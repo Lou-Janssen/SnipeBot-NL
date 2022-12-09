@@ -11,13 +11,8 @@ import { getChannel } from '../services/discordService';
 import { getUser } from '../services/osuApiService';
 import { getLinkedUsers } from '../services/userLinkingService';
 import { replyToInteraction } from './manager';
+import { osuMode } from '../services/osuApiService';
 
-export const Mode: Record<string, number> = {
-  osu: 0,
-  taiko: 1,
-  ctb: 2,
-  mania: 3
-};
 const OWNER_ID = 196642811964030986;
 
 export async function tryGetUser(user: User): Promise<LocalUser | null> {
@@ -35,10 +30,7 @@ export function getUsernameFromOptions(interaction: CommandInteraction): string 
 }
 
 export function getModeFromOptions(interaction: CommandInteraction): number {
-  const mode = interaction.options.getString(GeneralOptions.mode.name);
-  if (!mode) return 0;
-
-  return Mode[mode] || 0;
+  return osuMode;
 }
 
 export function tryGetBeatmapFromMessage(message: Message, botId: string | null): string | null {
